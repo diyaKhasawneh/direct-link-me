@@ -14,7 +14,109 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      links: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          label: string
+          profile_id: string | null
+          sort_order: number | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          label: string
+          profile_id?: string | null
+          sort_order?: number | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          label?: string
+          profile_id?: string | null
+          sort_order?: number | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "links_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          name: string
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      social_links: {
+        Row: {
+          id: string
+          is_active: boolean | null
+          platform: string
+          profile_id: string | null
+          sort_order: number | null
+          url: string
+        }
+        Insert: {
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          profile_id?: string | null
+          sort_order?: number | null
+          url: string
+        }
+        Update: {
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          profile_id?: string | null
+          sort_order?: number | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_links_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
