@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminRole } from "@/hooks/useAdminRole";
 import {
@@ -33,6 +34,41 @@ import {
   Share2,
   ShieldAlert,
 } from "lucide-react";
+
+// URL validation schema - blocks javascript: and data: URLs
+const urlSchema = z.string()
+  .min(1, "الرابط مطلوب")
+  .refine(
+    (url) => {
+      const lowerUrl = url.toLowerCase().trim();
+      return !lowerUrl.startsWith("javascript:") && !lowerUrl.startsWith("data:");
+    },
+    "رابط غير صالح"
+  )
+  .refine(
+    (url) => {
+      // Allow hash links for internal navigation
+      if (url.startsWith("#")) return true;
+      // Validate URL format
+      try {
+        new URL(url);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    "رابط غير صالح - يجب أن يبدأ بـ https://"
+  );
+
+const linkSchema = z.object({
+  label: z.string().min(1, "العنوان مطلوب").max(100, "العنوان طويل جداً"),
+  url: urlSchema,
+});
+
+const socialLinkSchema = z.object({
+  platform: z.string().min(1),
+  url: urlSchema,
+});
 
 const Admin = () => {
   const { isAuthenticated, loading: authLoading, signOut } = useAuth();
@@ -131,6 +167,14 @@ const Admin = () => {
   };
 
   const handleUpdateLink = async (link: Link) => {
+    // Validate before saving
+    const validation = linkSchema.safeParse({ label: link.label, url: link.url });
+    if (!validation.success) {
+      const errorMessage = validation.error.errors[0]?.message || "بيانات غير صالحة";
+      toast({ title: errorMessage, variant: "destructive" });
+      return;
+    }
+
     try {
       await updateLink.mutateAsync(link);
       toast({ title: "تم تحديث الرابط" });
@@ -165,6 +209,14 @@ const Admin = () => {
   };
 
   const handleUpdateSocial = async (social: SocialLink) => {
+    // Validate before saving
+    const validation = socialLinkSchema.safeParse({ platform: social.platform, url: social.url });
+    if (!validation.success) {
+      const errorMessage = validation.error.errors[0]?.message || "بيانات غير صالحة";
+      toast({ title: errorMessage, variant: "destructive" });
+      return;
+    }
+
     try {
       await updateSocialLink.mutateAsync(social);
       toast({ title: "تم التحديث" });
