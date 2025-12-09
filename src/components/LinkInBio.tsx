@@ -1,45 +1,44 @@
-import { MessageCircle, Star, MapPin, Facebook, Instagram } from "lucide-react";
+import {
+  MessageCircle,
+  Star,
+  MapPin,
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  Linkedin,
+  Link as LinkIconLucide,
+} from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import ProfileAvatar from "./ProfileAvatar";
 import LinkButton from "./LinkButton";
 import SocialIcon from "./SocialIcon";
+import { useProfile, useLinks, useSocialLinks } from "@/hooks/useProfile";
 import spaBackground from "@/assets/spa-background.jpg";
 
+const iconMap: Record<string, LucideIcon> = {
+  "message-circle": MessageCircle,
+  star: Star,
+  "map-pin": MapPin,
+  link: LinkIconLucide,
+};
+
+const socialIconMap: Record<string, LucideIcon> = {
+  facebook: Facebook,
+  instagram: Instagram,
+  twitter: Twitter,
+  youtube: Youtube,
+  linkedin: Linkedin,
+  tiktok: Instagram, // fallback
+  snapchat: MessageCircle, // fallback
+};
+
 const LinkInBio = () => {
-  const profileData = {
-    name: "حمام شهرزاد للسيدات",
-    tagline: "حكاية من ألف ليلة وليلة...في عالم من الاسترخاء والجمال",
-  };
+  const { data: profile, isLoading: profileLoading } = useProfile();
+  const { data: links = [], isLoading: linksLoading } = useLinks(profile?.id);
+  const { data: socialLinks = [], isLoading: socialLoading } = useSocialLinks(profile?.id);
 
-  const links = [
-    {
-      href: "https://wa.me/1234567890",
-      icon: MessageCircle,
-      label: "WhatsApp",
-    },
-    {
-      href: "#reviews",
-      icon: Star,
-      label: "تقييماتكم",
-    },
-    {
-      href: "#location",
-      icon: MapPin,
-      label: "موقعنا",
-    },
-  ];
-
-  const socials = [
-    {
-      href: "https://facebook.com",
-      icon: Facebook,
-      label: "Facebook",
-    },
-    {
-      href: "https://instagram.com",
-      icon: Instagram,
-      label: "Instagram",
-    },
-  ];
+  const isLoading = profileLoading || linksLoading || socialLoading;
 
   return (
     <div
@@ -55,53 +54,73 @@ const LinkInBio = () => {
 
       {/* Content container */}
       <div className="relative z-10 w-full max-w-md flex flex-col items-center gap-6">
-        {/* Profile section */}
-        <ProfileAvatar name={profileData.name} />
-
-        <div className="text-center space-y-2 animate-fade-up" style={{ animationDelay: "100ms" }}>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground text-shadow">
-            {profileData.name}
-          </h1>
-          <p className="text-foreground/80 text-sm md:text-base text-shadow">
-            {profileData.tagline}
-          </p>
-        </div>
-
-        {/* Links section */}
-        <div className="w-full space-y-4 mt-4">
-          {links.map((link, index) => (
-            <LinkButton
-              key={link.label}
-              href={link.href}
-              icon={link.icon}
-              label={link.label}
-              delay={200 + index * 100}
+        {isLoading ? (
+          <div className="text-foreground animate-pulse">جاري التحميل...</div>
+        ) : (
+          <>
+            {/* Profile section */}
+            <ProfileAvatar
+              name={profile?.name || "الاسم"}
+              imageUrl={profile?.avatar_url || undefined}
             />
-          ))}
-        </div>
 
-        {/* Social icons */}
-        <div
-          className="flex items-center gap-4 mt-6 animate-fade-up"
-          style={{ animationDelay: "600ms" }}
-        >
-          {socials.map((social) => (
-            <SocialIcon
-              key={social.label}
-              href={social.href}
-              icon={social.icon}
-              label={social.label}
-            />
-          ))}
-        </div>
+            <div
+              className="text-center space-y-2 animate-fade-up"
+              style={{ animationDelay: "100ms" }}
+            >
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground text-shadow">
+                {profile?.name || "اسم المشروع"}
+              </h1>
+              <p className="text-foreground/80 text-sm md:text-base text-shadow">
+                {profile?.tagline || "وصف المشروع"}
+              </p>
+            </div>
 
-        {/* Footer */}
-        <p
-          className="text-foreground/50 text-xs mt-8 animate-fade-in"
-          style={{ animationDelay: "800ms" }}
-        >
-          صنع بـ ❤️
-        </p>
+            {/* Links section */}
+            <div className="w-full space-y-4 mt-4">
+              {links.map((link, index) => {
+                const IconComponent = iconMap[link.icon || "link"] || LinkIconLucide;
+                return (
+                  <LinkButton
+                    key={link.id}
+                    href={link.url}
+                    icon={IconComponent}
+                    label={link.label}
+                    delay={200 + index * 100}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Social icons */}
+            {socialLinks.length > 0 && (
+              <div
+                className="flex items-center gap-4 mt-6 animate-fade-up"
+                style={{ animationDelay: "600ms" }}
+              >
+                {socialLinks.map((social) => {
+                  const IconComponent = socialIconMap[social.platform] || Facebook;
+                  return (
+                    <SocialIcon
+                      key={social.id}
+                      href={social.url}
+                      icon={IconComponent}
+                      label={social.platform}
+                    />
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Footer */}
+            <p
+              className="text-foreground/50 text-xs mt-8 animate-fade-in"
+              style={{ animationDelay: "800ms" }}
+            >
+              صنع بـ ❤️
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
