@@ -46,36 +46,36 @@ export const useAllProfiles = () => {
   });
 };
 
-// Get profile by slug (for public pages)
+// Get profile by slug (for public pages) - uses secure view that excludes user_id
 export const useProfileBySlug = (slug: string | undefined) => {
   return useQuery({
     queryKey: ["profile", slug],
     queryFn: async () => {
       if (!slug) return null;
       const { data, error } = await supabase
-        .from("profiles")
+        .from("public_profiles" as any)
         .select("*")
         .eq("slug", slug)
         .maybeSingle();
       if (error) throw error;
-      return data as Profile | null;
+      return data as unknown as Profile | null;
     },
     enabled: !!slug,
   });
 };
 
-// Get first/default profile (fallback)
+// Get first/default profile (fallback) - uses secure view that excludes user_id
 export const useProfile = () => {
   return useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
+        .from("public_profiles" as any)
         .select("*")
         .limit(1)
         .maybeSingle();
       if (error) throw error;
-      return data as Profile | null;
+      return data as unknown as Profile | null;
     },
   });
 };
