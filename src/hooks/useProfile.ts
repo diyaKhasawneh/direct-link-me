@@ -6,6 +6,7 @@ export interface Profile {
   name: string;
   tagline: string | null;
   avatar_url: string | null;
+  slug: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -30,6 +31,40 @@ export interface SocialLink {
   sort_order: number | null;
 }
 
+// Get all profiles (for admin)
+export const useAllProfiles = () => {
+  return useQuery({
+    queryKey: ["profiles"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .order("created_at", { ascending: true });
+      if (error) throw error;
+      return data as Profile[];
+    },
+  });
+};
+
+// Get profile by slug (for public pages)
+export const useProfileBySlug = (slug: string | undefined) => {
+  return useQuery({
+    queryKey: ["profile", slug],
+    queryFn: async () => {
+      if (!slug) return null;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (error) throw error;
+      return data as Profile | null;
+    },
+    enabled: !!slug,
+  });
+};
+
+// Get first/default profile (fallback)
 export const useProfile = () => {
   return useQuery({
     queryKey: ["profile"],
@@ -49,14 +84,20 @@ export const useLinks = (profileId?: string) => {
   return useQuery({
     queryKey: ["links", profileId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("links")
         .select("*")
         .order("sort_order", { ascending: true });
+      
+      if (profileId) {
+        query = query.eq("profile_id", profileId);
+      }
+      
+      const { data, error } = await query;
       if (error) throw error;
       return data as Link[];
     },
-    enabled: true,
+    enabled: !!profileId,
   });
 };
 
@@ -64,14 +105,51 @@ export const useSocialLinks = (profileId?: string) => {
   return useQuery({
     queryKey: ["social_links", profileId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("social_links")
         .select("*")
         .order("sort_order", { ascending: true });
+      
+      if (profileId) {
+        query = query.eq("profile_id", profileId);
+      }
+      
+      const { data, error } = await query;
       if (error) throw error;
       return data as SocialLink[];
     },
-    enabled: true,
+    enabled: !!profileId,
+  });
+};
+
+export const useCreateProfile = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (profile: { name: string; slug: string; tagline?: string }) => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .insert(profile)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profiles"] });
+    },
+  });
+};
+
+export const useDeleteProfile = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("profiles").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profiles"] });
+    },
   });
 };
 
@@ -88,8 +166,10 @@ export const useUpdateProfile = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["profiles"] });
+      queryClient.invalidateQueries({ queryKey: ["profile", variables.id] });
     },
   });
 };
@@ -106,8 +186,8 @@ export const useCreateLink = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["links"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["links", variables.profile_id] });
     },
   });
 };
@@ -156,8 +236,8 @@ export const useCreateSocialLink = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["social_links"] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["social_links", variables.profile_id] });
     },
   });
 };

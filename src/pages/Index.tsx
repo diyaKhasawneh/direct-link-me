@@ -1,7 +1,9 @@
+import { useParams } from "react-router-dom";
 import LinkInBio from "@/components/LinkInBio";
 
 const Index = () => {
-  return <LinkInBio />;
+  const { slug } = useParams<{ slug: string }>();
+  return <LinkInBio slug={slug} />;
 };
 
 export default Index;

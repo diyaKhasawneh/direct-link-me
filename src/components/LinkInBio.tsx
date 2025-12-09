@@ -13,7 +13,7 @@ import { LucideIcon } from "lucide-react";
 import ProfileAvatar from "./ProfileAvatar";
 import LinkButton from "./LinkButton";
 import SocialIcon from "./SocialIcon";
-import { useProfile, useLinks, useSocialLinks } from "@/hooks/useProfile";
+import { useProfileBySlug, useProfile, useLinks, useSocialLinks } from "@/hooks/useProfile";
 import spaBackground from "@/assets/spa-background.jpg";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -29,16 +29,46 @@ const socialIconMap: Record<string, LucideIcon> = {
   twitter: Twitter,
   youtube: Youtube,
   linkedin: Linkedin,
-  tiktok: Instagram, // fallback
-  snapchat: MessageCircle, // fallback
+  tiktok: Instagram,
+  snapchat: MessageCircle,
 };
 
-const LinkInBio = () => {
-  const { data: profile, isLoading: profileLoading } = useProfile();
+interface LinkInBioProps {
+  slug?: string;
+}
+
+const LinkInBio = ({ slug }: LinkInBioProps) => {
+  // Use slug-based query if slug provided, otherwise fallback to default profile
+  const { data: slugProfile, isLoading: slugLoading } = useProfileBySlug(slug);
+  const { data: defaultProfile, isLoading: defaultLoading } = useProfile();
+  
+  const profile = slug ? slugProfile : defaultProfile;
+  const profileLoading = slug ? slugLoading : defaultLoading;
+
   const { data: links = [], isLoading: linksLoading } = useLinks(profile?.id);
   const { data: socialLinks = [], isLoading: socialLoading } = useSocialLinks(profile?.id);
 
   const isLoading = profileLoading || linksLoading || socialLoading;
+
+  // Show 404 for invalid slugs
+  if (!isLoading && slug && !profile) {
+    return (
+      <div
+        className="min-h-screen w-full flex flex-col items-center justify-center p-6 relative overflow-hidden"
+        dir="rtl"
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${spaBackground})` }}
+        />
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
+        <div className="relative z-10 text-center space-y-4">
+          <h1 className="text-2xl font-bold text-foreground">الصفحة غير موجودة</h1>
+          <p className="text-foreground/80">البروفايل المطلوب غير متوفر</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
