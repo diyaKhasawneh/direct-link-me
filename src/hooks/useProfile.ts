@@ -6,6 +6,7 @@ export interface Profile {
   name: string;
   tagline: string | null;
   avatar_url: string | null;
+  background_url: string | null;
   slug: string | null;
   created_at: string;
   updated_at: string;
@@ -277,6 +278,20 @@ export const useDeleteSocialLink = () => {
 export const uploadAvatar = async (file: File): Promise<string> => {
   const fileExt = file.name.split(".").pop();
   const fileName = `avatar-${Date.now()}.${fileExt}`;
+  
+  const { error: uploadError } = await supabase.storage
+    .from("avatars")
+    .upload(fileName, file);
+
+  if (uploadError) throw uploadError;
+
+  const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
+  return data.publicUrl;
+};
+
+export const uploadBackground = async (file: File): Promise<string> => {
+  const fileExt = file.name.split(".").pop();
+  const fileName = `background-${Date.now()}.${fileExt}`;
   
   const { error: uploadError } = await supabase.storage
     .from("avatars")

@@ -78,7 +78,7 @@ const LinkInBio = ({ slug }: LinkInBioProps) => {
       {/* Background image with overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${spaBackground})` }}
+        style={{ backgroundImage: `url(${profile?.background_url || spaBackground})` }}
       />
       <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
 

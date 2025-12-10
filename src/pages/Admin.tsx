@@ -17,6 +17,7 @@ import {
   useUpdateSocialLink,
   useDeleteSocialLink,
   uploadAvatar,
+  uploadBackground,
   Link,
   SocialLink,
   Profile,
@@ -38,6 +39,7 @@ import {
   ShieldAlert,
   Users,
   ExternalLink,
+  Image,
 } from "lucide-react";
 
 // URL validation schema
@@ -83,6 +85,7 @@ const Admin = () => {
   const { isAdmin, loading: adminLoading } = useAdminRole();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const backgroundInputRef = useRef<HTMLInputElement>(null);
 
   const { data: profiles = [], isLoading: profilesLoading } = useAllProfiles();
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
@@ -106,9 +109,11 @@ const Admin = () => {
   const [tagline, setTagline] = useState("");
   const [slug, setSlug] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [backgroundUrl, setBackgroundUrl] = useState("");
   const [editableLinks, setEditableLinks] = useState<Link[]>([]);
   const [editableSocials, setEditableSocials] = useState<SocialLink[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [uploadingBackground, setUploadingBackground] = useState(false);
   
   // New profile form
   const [showNewProfile, setShowNewProfile] = useState(false);
@@ -133,6 +138,7 @@ const Admin = () => {
       setTagline(selectedProfile.tagline || "");
       setSlug(selectedProfile.slug || "");
       setAvatarUrl(selectedProfile.avatar_url || "");
+      setBackgroundUrl(selectedProfile.background_url || "");
     }
   }, [selectedProfile]);
 
@@ -158,6 +164,23 @@ const Admin = () => {
       toast({ title: "خطأ في رفع الصورة", variant: "destructive" });
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleBackgroundUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedProfile) return;
+
+    setUploadingBackground(true);
+    try {
+      const url = await uploadBackground(file);
+      setBackgroundUrl(url);
+      await updateProfile.mutateAsync({ id: selectedProfile.id, background_url: url });
+      toast({ title: "تم رفع الخلفية بنجاح" });
+    } catch (error) {
+      toast({ title: "خطأ في رفع الخلفية", variant: "destructive" });
+    } finally {
+      setUploadingBackground(false);
     }
   };
 
@@ -501,6 +524,43 @@ const Admin = () => {
                   </div>
                   <p className="text-sm text-muted-foreground">
                     {uploading ? "جاري الرفع..." : "اضغط لتغيير الصورة"}
+                  </p>
+                </div>
+
+                {/* Background Upload */}
+                <div className="flex flex-col items-center gap-4">
+                  <Label className="text-card-foreground flex items-center gap-2">
+                    <Image className="w-4 h-4 text-gold" />
+                    خلفية الصفحة
+                  </Label>
+                  <div className="relative w-full max-w-xs">
+                    <div className="w-full h-24 rounded-lg overflow-hidden bg-link border-2 border-gold/30">
+                      {backgroundUrl ? (
+                        <img src={backgroundUrl} alt="Background" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                          <Image className="w-8 h-8" />
+                        </div>
+                      )}
+                    </div>
+                    <input
+                      ref={backgroundInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleBackgroundUpload}
+                      className="hidden"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={() => backgroundInputRef.current?.click()}
+                      disabled={uploadingBackground}
+                      className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gold hover:bg-gold/90"
+                    >
+                      <Upload className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {uploadingBackground ? "جاري الرفع..." : "اضغط لتغيير الخلفية"}
                   </p>
                 </div>
 
