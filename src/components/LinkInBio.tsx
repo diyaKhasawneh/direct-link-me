@@ -117,6 +117,8 @@ const LinkInBio = ({ slug }: LinkInBioProps) => {
                     icon={IconComponent}
                     label={link.label}
                     delay={200 + index * 100}
+                    boxColor={profile?.box_color}
+                    textColor={profile?.box_text_color}
                   />
                 );
               })}
@@ -136,6 +138,8 @@ const LinkInBio = ({ slug }: LinkInBioProps) => {
                       href={social.url}
                       icon={IconComponent}
                       label={social.platform}
+                      iconColor={profile?.icon_color}
+                      bgColor={profile?.icon_bg_color}
                     />
                   );
                 })}

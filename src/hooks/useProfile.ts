@@ -10,6 +10,10 @@ export interface Profile {
   slug: string | null;
   created_at: string;
   updated_at: string;
+  box_color: string | null;
+  box_text_color: string | null;
+  icon_color: string | null;
+  icon_bg_color: string | null;
 }
 
 export interface Link {

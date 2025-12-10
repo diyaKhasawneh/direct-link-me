@@ -66,7 +66,11 @@ export type Database = {
         Row: {
           avatar_url: string | null
           background_url: string | null
+          box_color: string | null
+          box_text_color: string | null
           created_at: string
+          icon_bg_color: string | null
+          icon_color: string | null
           id: string
           name: string
           slug: string | null
@@ -77,7 +81,11 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           background_url?: string | null
+          box_color?: string | null
+          box_text_color?: string | null
           created_at?: string
+          icon_bg_color?: string | null
+          icon_color?: string | null
           id?: string
           name?: string
           slug?: string | null
@@ -88,7 +96,11 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           background_url?: string | null
+          box_color?: string | null
+          box_text_color?: string | null
           created_at?: string
+          icon_bg_color?: string | null
+          icon_color?: string | null
           id?: string
           name?: string
           slug?: string | null

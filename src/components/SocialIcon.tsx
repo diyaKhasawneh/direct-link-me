@@ -5,9 +5,13 @@ interface SocialIconProps {
   href: string;
   icon: LucideIcon;
   label: string;
+  iconColor?: string | null;
+  bgColor?: string | null;
 }
 
-const SocialIcon = ({ href, icon: Icon, label }: SocialIconProps) => {
+const SocialIcon = ({ href, icon: Icon, label, iconColor, bgColor }: SocialIconProps) => {
+  const hasCustomColors = iconColor || bgColor;
+  
   return (
     <a
       href={href}
@@ -16,11 +20,15 @@ const SocialIcon = ({ href, icon: Icon, label }: SocialIconProps) => {
       aria-label={label}
       className={cn(
         "w-12 h-12 rounded-full flex items-center justify-center",
-        "bg-card-foreground/10 backdrop-blur-sm",
-        "text-foreground hover:text-gold",
-        "hover:scale-110 hover:bg-card-foreground/20",
-        "transition-all duration-300"
+        "backdrop-blur-sm",
+        "hover:scale-110",
+        "transition-all duration-300",
+        !hasCustomColors && "bg-card-foreground/10 text-foreground hover:text-gold hover:bg-card-foreground/20"
       )}
+      style={{
+        ...(bgColor && { backgroundColor: bgColor }),
+        ...(iconColor && { color: iconColor }),
+      }}
     >
       <Icon className="w-5 h-5" />
     </a>

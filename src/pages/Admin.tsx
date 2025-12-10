@@ -40,6 +40,7 @@ import {
   Users,
   ExternalLink,
   Image,
+  Palette,
 } from "lucide-react";
 
 // URL validation schema
@@ -110,6 +111,10 @@ const Admin = () => {
   const [slug, setSlug] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [backgroundUrl, setBackgroundUrl] = useState("");
+  const [boxColor, setBoxColor] = useState("#ffffff");
+  const [boxTextColor, setBoxTextColor] = useState("#1a1a2e");
+  const [iconColor, setIconColor] = useState("#d4a574");
+  const [iconBgColor, setIconBgColor] = useState("#1a1a2e");
   const [editableLinks, setEditableLinks] = useState<Link[]>([]);
   const [editableSocials, setEditableSocials] = useState<SocialLink[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -139,6 +144,10 @@ const Admin = () => {
       setSlug(selectedProfile.slug || "");
       setAvatarUrl(selectedProfile.avatar_url || "");
       setBackgroundUrl(selectedProfile.background_url || "");
+      setBoxColor(selectedProfile.box_color || "#ffffff");
+      setBoxTextColor(selectedProfile.box_text_color || "#1a1a2e");
+      setIconColor(selectedProfile.icon_color || "#d4a574");
+      setIconBgColor(selectedProfile.icon_bg_color || "#1a1a2e");
     }
   }, [selectedProfile]);
 
@@ -201,6 +210,10 @@ const Admin = () => {
         tagline,
         slug,
         avatar_url: avatarUrl,
+        box_color: boxColor,
+        box_text_color: boxTextColor,
+        icon_color: iconColor,
+        icon_bg_color: iconBgColor,
       });
       toast({ title: "تم حفظ البيانات بنجاح" });
     } catch (error: any) {
@@ -604,6 +617,123 @@ const Admin = () => {
                   </Button>
                 </div>
               </div>
+            </section>
+
+            {/* Color Customization Section */}
+            <section className="bg-cream/50 rounded-xl p-6 border border-link-border">
+              <div className="flex items-center gap-2 mb-6">
+                <Palette className="w-5 h-5 text-gold" />
+                <h2 className="text-lg font-semibold text-card-foreground">تخصيص الألوان</h2>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Box Colors */}
+                <div className="space-y-4">
+                  <h3 className="text-md font-medium text-card-foreground">ألوان الروابط</h3>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <Label className="text-card-foreground text-sm">لون الخلفية</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={boxColor}
+                          onChange={(e) => setBoxColor(e.target.value)}
+                          className="w-12 h-10 rounded cursor-pointer border border-link-border"
+                        />
+                        <Input
+                          value={boxColor}
+                          onChange={(e) => setBoxColor(e.target.value)}
+                          className="bg-background/50 border-link-border flex-1"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <Label className="text-card-foreground text-sm">لون النص</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={boxTextColor}
+                          onChange={(e) => setBoxTextColor(e.target.value)}
+                          className="w-12 h-10 rounded cursor-pointer border border-link-border"
+                        />
+                        <Input
+                          value={boxTextColor}
+                          onChange={(e) => setBoxTextColor(e.target.value)}
+                          className="bg-background/50 border-link-border flex-1"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Preview */}
+                  <div 
+                    className="p-4 rounded-xl border border-link-border text-center"
+                    style={{ backgroundColor: boxColor, color: boxTextColor }}
+                  >
+                    معاينة الرابط
+                  </div>
+                </div>
+
+                {/* Icon Colors */}
+                <div className="space-y-4">
+                  <h3 className="text-md font-medium text-card-foreground">ألوان الأيقونات</h3>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <Label className="text-card-foreground text-sm">لون الأيقونة</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={iconColor}
+                          onChange={(e) => setIconColor(e.target.value)}
+                          className="w-12 h-10 rounded cursor-pointer border border-link-border"
+                        />
+                        <Input
+                          value={iconColor}
+                          onChange={(e) => setIconColor(e.target.value)}
+                          className="bg-background/50 border-link-border flex-1"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <Label className="text-card-foreground text-sm">لون خلفية الأيقونة</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={iconBgColor}
+                          onChange={(e) => setIconBgColor(e.target.value)}
+                          className="w-12 h-10 rounded cursor-pointer border border-link-border"
+                        />
+                        <Input
+                          value={iconBgColor}
+                          onChange={(e) => setIconBgColor(e.target.value)}
+                          className="bg-background/50 border-link-border flex-1"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Preview */}
+                  <div className="flex justify-center">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: iconBgColor, color: iconColor }}
+                    >
+                      <Share2 className="w-5 h-5" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Button onClick={handleSaveProfile} className="bg-gold hover:bg-gold/90 mt-6">
+                <Save className="w-4 h-4 ml-2" />
+                حفظ الألوان
+              </Button>
             </section>
 
             {/* Links Section */}
