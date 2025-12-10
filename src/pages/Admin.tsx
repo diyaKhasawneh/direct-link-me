@@ -448,7 +448,7 @@ const Admin = () => {
                     value={newProfileName}
                     onChange={(e) => setNewProfileName(e.target.value)}
                     placeholder="اسم البروفايل"
-                    className="bg-card border-link-border mt-1"
+                    className="bg-card border-link-border mt-1 text-card-foreground placeholder:text-muted-foreground"
                   />
                 </div>
                 <div>
@@ -457,7 +457,7 @@ const Admin = () => {
                     value={newProfileSlug}
                     onChange={(e) => setNewProfileSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
                     placeholder="my-profile"
-                    className="bg-card border-link-border mt-1"
+                    className="bg-card border-link-border mt-1 text-card-foreground placeholder:text-muted-foreground"
                     dir="ltr"
                   />
                 </div>
@@ -585,7 +585,7 @@ const Admin = () => {
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="bg-background/50 border-link-border mt-1"
+                      className="bg-card border-link-border mt-1 text-card-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div>
@@ -594,7 +594,7 @@ const Admin = () => {
                       id="tagline"
                       value={tagline}
                       onChange={(e) => setTagline(e.target.value)}
-                      className="bg-background/50 border-link-border mt-1"
+                      className="bg-card border-link-border mt-1 text-card-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div>
@@ -605,7 +605,7 @@ const Admin = () => {
                         id="slug"
                         value={slug}
                         onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
-                        className="bg-background/50 border-link-border"
+                        className="bg-card border-link-border text-card-foreground placeholder:text-muted-foreground"
                         dir="ltr"
                         placeholder="my-profile"
                       />
@@ -643,7 +643,7 @@ const Admin = () => {
                         <Input
                           value={boxColor}
                           onChange={(e) => setBoxColor(e.target.value)}
-                          className="bg-background/50 border-link-border flex-1"
+                          className="bg-card border-link-border flex-1 text-card-foreground"
                           dir="ltr"
                         />
                       </div>
@@ -662,7 +662,7 @@ const Admin = () => {
                         <Input
                           value={boxTextColor}
                           onChange={(e) => setBoxTextColor(e.target.value)}
-                          className="bg-background/50 border-link-border flex-1"
+                          className="bg-card border-link-border flex-1 text-card-foreground"
                           dir="ltr"
                         />
                       </div>
@@ -693,7 +693,7 @@ const Admin = () => {
                         <Input
                           value={iconColor}
                           onChange={(e) => setIconColor(e.target.value)}
-                          className="bg-background/50 border-link-border flex-1"
+                          className="bg-card border-link-border flex-1 text-card-foreground"
                           dir="ltr"
                         />
                       </div>
@@ -712,7 +712,7 @@ const Admin = () => {
                         <Input
                           value={iconBgColor}
                           onChange={(e) => setIconBgColor(e.target.value)}
-                          className="bg-background/50 border-link-border flex-1"
+                          className="bg-card border-link-border flex-1 text-card-foreground"
                           dir="ltr"
                         />
                       </div>
@@ -761,7 +761,7 @@ const Admin = () => {
                           )
                         }
                         placeholder="عنوان الرابط"
-                        className="bg-card border-link-border"
+                        className="bg-card border-link-border text-card-foreground placeholder:text-muted-foreground"
                       />
                       <Input
                         value={link.url}
@@ -771,7 +771,7 @@ const Admin = () => {
                           )
                         }
                         placeholder="الرابط"
-                        className="bg-card border-link-border"
+                        className="bg-card border-link-border text-card-foreground placeholder:text-muted-foreground"
                         dir="ltr"
                       />
                     </div>
@@ -841,7 +841,7 @@ const Admin = () => {
                           )
                         }
                         placeholder="الرابط"
-                        className="bg-card border-link-border"
+                        className="bg-card border-link-border text-card-foreground placeholder:text-muted-foreground"
                         dir="ltr"
                       />
                     </div>
