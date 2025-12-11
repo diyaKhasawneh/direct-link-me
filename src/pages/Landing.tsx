@@ -302,6 +302,127 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Customization Section */}
+      <section className="relative py-24 overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d1f3c] to-[#0a1628]" />
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="order-2 lg:order-1"
+            >
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 leading-tight">
+                بطاقات الأعمال
+                <br />
+                <span className="text-brand-blue">الرقمية</span> قابلة
+                <br />
+                للتخصيص بالكامل
+              </h2>
+              <p className="text-foreground/60 text-lg leading-relaxed mb-8 max-w-xl">
+                تخلّص من البطاقات الورقية - بطاقات الأعمال الرقمية المخصصة بتقنية NFC تترك انطباعاً خاصاً. انقر لمشاركة معلومات الاتصال الخاصة بك في ثوانٍ. اختر من بين البطاقات البلاستيكية والتصميم المعدني - تأتي كل بطاقة مع رمز QR للمشاركة السريعة. ✨
+              </p>
+              <motion.a
+                href="#products"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center justify-center gap-2 py-4 px-10 bg-foreground text-background font-bold text-lg rounded-full transition-all duration-300 hover:bg-foreground/90"
+              >
+                اطلب الآن
+              </motion.a>
+            </motion.div>
+
+            {/* Floating Cards Visual */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="order-1 lg:order-2 relative h-[400px] md:h-[500px]"
+            >
+              {/* Main Card */}
+              <motion.div
+                animate={{ y: [0, -15, 0], rotate: [0, 2, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 md:w-80"
+              >
+                <div className="bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/20">
+                  <div className="flex justify-between items-start mb-8">
+                    <div>
+                      <p className="text-gray-600 text-sm">Your Logo</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5">
+                      <div className="flex gap-0.5">
+                        {[...Array(4)].map((_, i) => (
+                          <div key={i} className="w-1 h-1 bg-brand-blue rounded-full" />
+                        ))}
+                      </div>
+                      <div className="w-6 h-6 rounded-full bg-brand-blue/20 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-brand-blue" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <p className="text-gray-800 font-bold text-lg">Your Name</p>
+                      <p className="text-gray-500 text-sm">Your Title</p>
+                    </div>
+                    <div className="w-16 h-16 bg-gray-100 rounded-lg p-1">
+                      <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCBmaWxsPSIjMDAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIvPjxyZWN0IGZpbGw9IiNmZmYiIHg9IjEwIiB5PSIxMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIi8+PHJlY3QgZmlsbD0iI2ZmZiIgeD0iNDAiIHk9IjEwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiLz48cmVjdCBmaWxsPSIjZmZmIiB4PSI3MCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIvPjxyZWN0IGZpbGw9IiNmZmYiIHg9IjEwIiB5PSI0MCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIi8+PHJlY3QgZmlsbD0iI2ZmZiIgeD0iNDAiIHk9IjQwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiLz48cmVjdCBmaWxsPSIjZmZmIiB4PSI3MCIgeT0iNDAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIvPjxyZWN0IGZpbGw9IiNmZmYiIHg9IjEwIiB5PSI3MCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIi8+PHJlY3QgZmlsbD0iI2ZmZiIgeD0iNDAiIHk9IjcwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiLz48cmVjdCBmaWxsPSIjZmZmIiB4PSI3MCIgeT0iNzAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIvPjwvc3ZnPg==')] bg-cover rounded" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Floating Elements */}
+              <motion.div
+                animate={{ y: [0, -20, 0], rotate: [0, -5, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute top-10 right-10 w-16 h-16 md:w-20 md:h-20"
+              >
+                <div className="w-full h-full bg-gradient-to-br from-brand-blue/30 to-brand-blue/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-brand-blue/30 shadow-lg shadow-brand-blue/20">
+                  <span className="text-2xl">🎨</span>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [0, -25, 0], rotate: [0, 8, 0] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute top-20 left-5 w-14 h-14 md:w-16 md:h-16"
+              >
+                <div className="w-full h-full bg-gradient-to-br from-brand-yellow/30 to-brand-yellow/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-brand-yellow/30 shadow-lg shadow-brand-yellow/20">
+                  <div className="grid grid-cols-2 gap-0.5">
+                    {['bg-red-500', 'bg-yellow-500', 'bg-green-500', 'bg-blue-500'].map((color, i) => (
+                      <div key={i} className={`w-2 h-2 ${color} rounded-full`} />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [0, -18, 0], rotate: [0, -3, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                className="absolute bottom-20 left-10 w-12 h-12 md:w-14 md:h-14"
+              >
+                <div className="w-full h-full bg-gradient-to-br from-brand-red/30 to-brand-red/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-brand-red/30 shadow-lg shadow-brand-red/20">
+                  <span className="text-xl">✏️</span>
+                </div>
+              </motion.div>
+
+              {/* Decorative glow */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl pointer-events-none" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Products Section */}
       <section id="products" className="relative py-24">
         <div className="container mx-auto px-4">
